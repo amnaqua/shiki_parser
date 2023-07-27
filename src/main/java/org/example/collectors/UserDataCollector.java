@@ -69,19 +69,23 @@ public class UserDataCollector {
         return 0;
     }
 
-    private void getListOf(int numberOfPages, List<Integer> userDrops, String page) throws IOException {
-        List<String> str = new ArrayList<>();
-        for (int i = 1; i <= numberOfPages; i++) {
-            Document document = Jsoup
-                    .connect("https://shikimori.me/" + userName + "/list/anime/mylist/"
-                            + page + "/order-by/rate_score/page/" + i)
-                    .userAgent("Chrome/113.0.0.0 Safari/537.36")
-                    .get();
-            Elements temp = document.getElementsByAttribute("data-target_id");
-            str.addAll(temp.eachAttr("data-target_id"));
-        }
-        for (int i = 0; i < str.size(); i++) {
-            userDrops.add(i, Integer.parseInt(str.get(i)));
+    private void getListOf(int numberOfPages, List<Integer> userDrops, String page) {
+        try {
+            List<String> str = new ArrayList<>();
+            for (int i = 1; i <= numberOfPages; i++) {
+                Document document = Jsoup
+                        .connect("https://shikimori.me/" + userName + "/list/anime/mylist/"
+                                + page + "/order-by/rate_score/page/" + i)
+                        .userAgent("Chrome/113.0.0.0 Safari/537.36")
+                        .get();
+                Elements temp = document.getElementsByAttribute("data-target_id");
+                str.addAll(temp.eachAttr("data-target_id"));
+            }
+            for (int i = 0; i < str.size(); i++) {
+                userDrops.add(i, Integer.parseInt(str.get(i)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
